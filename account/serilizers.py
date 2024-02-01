@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from account.models import User
+from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode 
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 class UserRegestrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -32,7 +35,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "email", "mobile"]
 
-        
 class UserChangePassSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only= True)
     password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only= True)
@@ -53,3 +55,14 @@ class UserChangePassSerializer(serializers.Serializer):
 
         return attrs
 
+class SendPassResetEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    class Meta:
+        fields = ["email"]
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        if User.objects.filter(email=email).exist():
+            user = User.objects.get(email=email)
+        else:
+            raise ValidationError("This email id is not regestered with us")
