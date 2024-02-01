@@ -33,3 +33,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "mobile"]
 
         
+class UserChangePassSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only= True)
+    password2 = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only= True)
+    class Meta:
+        fields = ["password", "password2"]
+
+    def validate(self, attrs):
+        # bajaj finance
+        # assian paints
+        # mtar tech
+        password=attrs.get('password')
+        password2=attrs.get('password2')
+        user = self.context.get('user')
+        if password != password2:
+            raise serializers.ValidationError("Password and confirm password should same")
+        user.ser_password(password)
+        user.save()
+
+        return attrs
+

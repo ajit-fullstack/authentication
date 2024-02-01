@@ -2,7 +2,7 @@ from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
-from .serilizers import UserRegestrationSerializer, UserLoginSerializer, UserProfileSerializer
+from .serilizers import UserRegestrationSerializer, UserLoginSerializer, UserProfileSerializer, UserChangePassSerializer
 from django.contrib.auth import authenticate
 from account.renderer import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -48,3 +48,15 @@ class UserProfileView(APIView):
     def get(self, request, format=None):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserChangePassView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+    def post(self, request, format=None):
+        serializer = UserChangePassSerializer(data=request.data, context={'user': request.user})
+        if serializer.is_valid(raise_exception=True):
+            return Response({'msg': 'Password has been sucessfully changed'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
