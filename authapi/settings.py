@@ -138,6 +138,8 @@ REST_FRAMEWORK = {
     # 'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer', )
 }
 
+# 
+
 # jwt settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
@@ -158,6 +160,8 @@ SIMPLE_JWT = {
 
     "JTI_CLAIM": "jti",
 }
+
+PASSWORD_RESET_TIMEOUT = 900 #900 sec = 15 min
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
