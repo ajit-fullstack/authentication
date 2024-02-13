@@ -1,10 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { Box, Button, TextField, Alert } from '@mui/material';
 
 function Login() {
   return (
-    <div>
-        <h1>Login Page</h1>
-    </div>
+    <Box component='form' noValidate sx={{mt: 1}} id="login-form">
+      <TextField required fullWidth id='email' name='email' label='Email Address' />
+      <TextField required fullWidth id='password' name='password' label='Password' />
+    </Box>
   )
 }
 
