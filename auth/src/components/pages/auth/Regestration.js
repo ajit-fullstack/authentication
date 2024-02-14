@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Box, Button, TextField, Alert, FormControl, FormControlLabel, Checkbox } from '@mui/material';
+import { Box, Button, TextField, Alert, FormControlLabel, Checkbox } from '@mui/material';
 
 function Regestration() {
+
   const [error, setError] = useState({
     status: false,
     msg: "",
     type: ""
-  })
-  const navigate = useNavigate()
+  });
+
+  const navigate = useNavigate();
+
   const handleSubmit = (e) =>{
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -25,6 +28,9 @@ function Regestration() {
         document.getElementById('regestration-form').reset();
         setError({status: true, msg: "Regestration sucessfull", type: 'success'});
         // navigate('/');
+        setTimeout(()=>{
+          navigate('/dashboard');
+        }, 3000);
       }
       else{
         setError({status: true, msg: "Password and confirm password does't match", type: 'error'});
@@ -33,6 +39,7 @@ function Regestration() {
       setError({status: true, msg: "All fields are required", type: 'error'})
     }
   }
+  
   return (
     <Box component='form' noValidate sx={{mt: 1}} id="regestration-form" onSubmit={handleSubmit}>
       <TextField margin='normal' required fullWidth id='email' name='email' label='Email Address' />

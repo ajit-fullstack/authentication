@@ -20,7 +20,9 @@ function Login() {
       console.log(actualData);
       document.getElementById('login-form').reset();
       setError({status: true, msg: "Login sucess", type: 'success'});
-      navigate('/');
+      setTimeout(()=>{
+        navigate('/dashboard');
+      }, 3000);
     }else{
       setError({status: true, msg: "All fields are required", type: 'error'})
     }
@@ -32,7 +34,7 @@ function Login() {
       <Box textAlign="center">
         <Button type='submit' variant='contained' sx={{mt:3, mb: 2, px: 5}}>Login</Button>
       </Box>
-      <NavLink>Forgot Password?</NavLink>
+      <NavLink to="/sendpasswordresetemail">Forgot Password?</NavLink>
       {error.status ? <Alert severity={error.type}>{error.msg}</Alert> : ''}
     </Box>
   )
