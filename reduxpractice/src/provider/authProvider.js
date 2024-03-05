@@ -7,16 +7,22 @@ import React, {
     useState
 } from 'react';
 
-function authProvider() {
+const AuthContext = createContext();
 
-    const AuthContext = createContext();
-    const AuthProvider = ({childeren}) =>{
-        
-    }
+const AuthProvider = ({childeren}) =>{
+
+  // State to hold the authentication token
+  const [token, setToken_] = useState(localStorage.getItem("token"));
+
+  // Function to set the authentication token
+  const setToken = (newToken) => {
+    setToken_(newToken);
+  };
+
 
   return (
     <div>authProvider</div>
   )
 }
 
-export default authProvider
+export default AuthProvider
