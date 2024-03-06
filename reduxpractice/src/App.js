@@ -1,12 +1,23 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import Child from './components/Child';
 import CreateTodo from './components/createTodo';
 import TodoList from './components/todoList';
 
 export const GlobalInfo = createContext()
 
+function useCustom(){
+  const [value, setValue] = useState('');
+  useEffect(()=>{
+    setValue('updated');
+  }, [])
+  return value;
+}
+
 function App() {
   const [color, setColor] = useState('green');
+
+  const value = useCustom();
+  console.log('value', value)
 
   const getDay = (item) => {
     console.log(item);
