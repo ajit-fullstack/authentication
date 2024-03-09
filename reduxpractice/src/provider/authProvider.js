@@ -1,28 +1,40 @@
-import axios from 'axios';
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState
-} from 'react';
+import axios from "../utils/axios";
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext()
 
-const AuthProvider = ({childeren}) =>{
+const AuthProvider = ({childern}) => {
+  const [token, setToken_] = useState(localStorage.getItem('token'));
 
-  // State to hold the authentication token
-  const [token, setToken_] = useState(localStorage.getItem("token"));
+  const setToken = (newToken) =>{
+    setToken_(newToken)
+  }
 
-  // Function to set the authentication token
-  const setToken = (newToken) => {
-    setToken_(newToken);
-  };
+  useEffect(()=>{
+    if (token){
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+      localStorage.setItem('token', token);
+    }else{
+      delete axios.defaults.headers.common["Authorization"];
+      localStorage.removeItem('token')
+    }
+  }, [token]);
 
+  const contextValue = useMemo(()=>({
+    token, setToken
+  }),
+  [token]
+  );
 
-  return (
-    <div>authProvider</div>
-  )
-}
+  return (<AuthContext.Provider value={contextValue}>
+    {childern}
+  </AuthContext.Provider>
+  );
+  
+};
 
-export default AuthProvider
+export const useAuth = () =>{
+  return useContext(AuthContext);
+};
+
+export default AuthProvider;
